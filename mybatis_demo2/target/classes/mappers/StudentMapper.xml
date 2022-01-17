@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.StudentDao">
+
+
+    <!--添加方法的对应 sql 代码-->
+    <!--    useGeneratedKeys 设置添加操作是否需要回填生成的主键-->
+    <!--    keyProperty 设置回填主键值赋值到参数对象的哪个属性中-->
+    <insert id="insertStudent" useGeneratedKeys="true" keyProperty="stuId">
+        insert into tb_student(stu_num,stu_name,stu_gender,stu_age)
+        values(#{stuNum},#{stuName},#{stuGender},#{stuAge})
+    </insert>
+
+    <!--删除方法的对应 sql 代码-->
+    <delete id="deleteStudent" parameterType="pojo.Student">
+        delete from tb_student where stu_num=#{stuNum}
+    </delete>
+
+    <!--修改方法的对应 sql 代码-->
+    <update id="updateStudent">
+
+        update tb_student
+        set
+            stu_name = #{stuName},
+            stu_gender = #{stuGender},
+            stu_age = #{stuAge}
+        where
+            stu_num = #{stuNum}
+
+    </update>
+
+    <!--    &lt;!&ndash;查询所有字符 sql&ndash;&gt;-->
+    <!--    <select id="listStudents" resultType="pojo.Student" >-->
+    <!--        select sid stuId, stu_num stuNum,stu_name stuName,stu_gender stuGender,stu_age stuAge-->
+    <!--        from tb_student-->
+    <!--    </select>-->
+
+    <!--    设置别名-->
+    <resultMap id="student" type="pojo.Student">
+        <id column="sid" property="stuId"></id>
+        <id column="stu_num" property="stuNum"></id>
+        <id column="stu_name" property="stuName"></id>
+        <id column="stu_gender" property="stuGender"></id>
+        <id column="stu_age" property="stuAge"></id>
+    </resultMap>
+
+    <!--查询所有字符 sql-->
+    <select id="listStudents" resultMap="student">
+        select sid, stu_num,stu_name,stu_gender,stu_age
+        from tb_student
+    </select>
+
+    <!--    根据学号查询一个学生-->
+    <select id="queryStudent" resultMap="student">
+
+        select sid, stu_num,stu_name,stu_gender,stu_age
+        from tb_student
+        where stu_num = #{stuNum}
+    </select>
+
+<!--    查询总共学生的个数-->
+    <select id="getCount" resultType="int">
+        select  count(1) from tb_student
+    </select>
+
+    <select id="listStudentsByPage" resultMap="student">
+        select sid, stu_num,stu_name,stu_gender,stu_age
+        from tb_student
+        limit #{start },#{pageSize}
+    </select>
+
+
+
+</mapper>
